@@ -48,8 +48,7 @@ public class Server extends Thread {
                     continue;
                 }
 
-
-                String replyString = "Messaged received by Java server";
+                String replyString = "Message received by Java server";
                 buf = replyString.getBytes();
                 DatagramPacket reply = new DatagramPacket(buf, buf.length, address, port);
                 System.out.println("Received from client:" + received + " at port: " + port);
