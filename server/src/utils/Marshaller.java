@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 
 public class Marshaller {
 
+    /* This segment is just for testing the Marshaller and Unmarshaller. To be deleted later on */
     public static void main(String[] args) throws Exception {
         Marshaller m = new Marshaller();
 

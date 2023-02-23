@@ -66,6 +66,8 @@ def unmarshal(message: bytearray) -> map:
     
     return res
 
+
+""" This segment is just for testing the Marshaller and Unmarshaller. To be deleted later on """
 testmap = {}
 testmap["Flight Number"] = 123
 testmap["Message"] = "Long flight message details here"
