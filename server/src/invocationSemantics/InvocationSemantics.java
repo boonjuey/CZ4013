@@ -5,7 +5,6 @@ import java.net.DatagramPacket;
 import controller.RequestController;
 import controller.ResponseController;
 import errors.DuplicateFlightIdException;
-import errors.DuplicateRequestException;
 import errors.InsufficientSeatsException;
 import errors.InvalidFlightIdException;
 import errors.NoFlightFoundException;
@@ -24,8 +23,8 @@ public abstract class InvocationSemantics {
         return requestController.getRequest(packet);
     }
 
-    public Object processRequest(Request request) throws DuplicateFlightIdException, DuplicateRequestException,
-    InsufficientSeatsException, InvalidFlightIdException, NoFlightFoundException {
+    public Object processRequest(Request request) throws DuplicateFlightIdException,
+            InsufficientSeatsException, InvalidFlightIdException, NoFlightFoundException {
         return requestController.processRequest(request);
     }
 

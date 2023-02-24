@@ -5,7 +5,6 @@ import java.util.Map;
 
 import dao.FlightDao;
 import errors.DuplicateFlightIdException;
-import errors.DuplicateRequestException;
 import errors.InsufficientSeatsException;
 import errors.InvalidFlightIdException;
 import errors.NoFlightFoundException;
@@ -30,7 +29,7 @@ public class RequestController {
         return request;
     }
 
-    public Object processRequest(Request request) throws DuplicateFlightIdException, DuplicateRequestException,
+    public Object processRequest(Request request) throws DuplicateFlightIdException,
             InsufficientSeatsException, InvalidFlightIdException, NoFlightFoundException {
         switch (request.getRequestType()) {
             case 0:

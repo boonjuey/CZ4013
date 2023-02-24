@@ -16,15 +16,26 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 
 public class Server extends Thread {
-
     private String server_host;
     private int server_port;
     private int timeout;
     private DatagramSocket socket;
     private boolean running;
     private byte[] buf = new byte[256];
+    private InvocationSemantics invocationSemantics;
 
-    public Server() {
+    public Server(String[] args) {
+        FlightDao flightDao = new FlightDao();
+        flightDao.readFile();
+        RequestController requestController = new RequestController(flightDao);
+        ResponseController responseController = new ResponseController();
+
+        if (args.length > 0 && args[0].equals("atmostonce")) {
+            invocationSemantics = new AtMostOnce(requestController, responseController);
+        } else {
+            invocationSemantics = new AtLeastOnce(requestController, responseController);
+        }
+
         try {
             String configFilePath = System.getProperty("user.dir") + "\\server\\src\\utils\\config.properties";
             FileInputStream propsInput = new FileInputStream(configFilePath);
@@ -42,25 +53,18 @@ public class Server extends Thread {
     }
 
     public void run() {
+        System.out.println("Running server...");
+        running = true;
+
         try {
-            System.out.println("Running server...");
-            running = true;
-
-            FlightDao flightDao = new FlightDao();
-            flightDao.readFile();
-            RequestController requestController = new RequestController(flightDao);
-            ResponseController responseController = new ResponseController();
-            InvocationSemantics invocationSemantics = new AtLeastOnce(requestController, responseController);
-            // InvocationSemantics invocationSemantics2 = new AtMostOnce(requestController, responseController);
-
             while (running) {
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
-                
+
                 long endTime = System.currentTimeMillis() + timeout * 1000;
                 Request request = invocationSemantics.getRequest(packet);
                 DatagramPacket response = null;
-                
+
                 try {
                     Object result = invocationSemantics.processRequest(request);
                     response = invocationSemantics.sendResponse(request, result, null);
