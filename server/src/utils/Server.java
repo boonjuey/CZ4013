@@ -21,7 +21,7 @@ public class Server extends Thread {
     private int timeout;
     private DatagramSocket socket;
     private boolean running;
-    private byte[] buf = new byte[256];
+    private byte[] buf = new byte[1024];
     private InvocationSemantics invocationSemantics;
 
     public Server(String[] args) {
@@ -58,6 +58,7 @@ public class Server extends Thread {
 
         try {
             while (running) {
+                buf = new byte[1024];
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
 
