@@ -1,5 +1,5 @@
 class Request:
-    def __init__(self, request_type: int, request_body: dict):
+    def __init__(self, request_type: int, request_body: dict) -> None:
         self.request_type = request_type
         self.request_body = request_body
 

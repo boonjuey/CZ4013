@@ -28,7 +28,7 @@ public abstract class InvocationSemantics {
         return requestController.processRequest(request);
     }
 
-    public DatagramPacket sendResponse(Request request, Object result, Exception exception) {
-        return responseController.sendResponse(request, result, exception);
+    public DatagramPacket prepareResponse(Request request, Object result, Exception exception) {
+        return responseController.prepareResponse(request, result, exception);
     }
 }

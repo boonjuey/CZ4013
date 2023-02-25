@@ -67,9 +67,9 @@ public class Server extends Thread {
 
                 try {
                     Object result = invocationSemantics.processRequest(request);
-                    response = invocationSemantics.sendResponse(request, result, null);
+                    response = invocationSemantics.prepareResponse(request, result, null);
                 } catch (Exception e) {
-                    response = invocationSemantics.sendResponse(request, null, e);
+                    response = invocationSemantics.prepareResponse(request, null, e);
                 }
                 System.out.println("Response: " + new String(response.getData()));
 

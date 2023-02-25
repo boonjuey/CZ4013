@@ -40,8 +40,8 @@ class UDP:
                     
                     data = s.recvfrom(UDP_BUF_SIZE) # receive response
                     response = response_controller.process_response(data)
+                    response.print_response()
                     response_received = True
-                    print(response)
                     break
                 except socket.timeout:
                     print("Request timed out. Retrying...")

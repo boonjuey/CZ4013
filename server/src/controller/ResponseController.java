@@ -6,24 +6,25 @@ import java.util.List;
 
 import model.Flight;
 import model.Request;
+import model.Response;
 import utils.Marshaller;
 
 public class ResponseController {
      @SuppressWarnings("unchecked")
-     public DatagramPacket sendResponse(Request request, Object result, Exception e) {
-          DatagramPacket response = null;
+     public DatagramPacket prepareResponse(Request request, Object result, Exception e) {
+          Response response = null;
           if (e == null) {
                switch (request.getRequestType()) {
                     case 0:
-                         response = prepareResponse(request, new HashMap<String, Object>() {
+                         response = new Response(new HashMap<String, Object>() {
                               {
-                                   put("result", (List<Integer>) result);
+                                   put("result", (List<Flight>) result);
                               }
                          });
                          break;
                     case 1:
                          Flight flight = (Flight) result;
-                         response = prepareResponse(request, new HashMap<String, Object>() {
+                         response = new Response(new HashMap<String, Object>() {
                               {
                                    put("flightId", flight.getFlightId());
                                    put("source", flight.getSource());
@@ -35,21 +36,21 @@ public class ResponseController {
                          });
                          break;
                     case 2:
-                         response = prepareResponse(request, new HashMap<String, Object>() {
+                         response = new Response(new HashMap<String, Object>() {
                               {
                                    put("result", "Reservation made successfully");
                               }
                          });
                          break;
                     case 3:
-                         response = prepareResponse(request, new HashMap<String, Object>() {
+                         response = new Response(new HashMap<String, Object>() {
                               {
                                    put("result", (List<String>) result);
                               }
                          });
                          break;
                     case 4:
-                         response = prepareResponse(request, new HashMap<String, Object>() {
+                         response = new Response(new HashMap<String, Object>() {
                               {
                                    put("result", "Flight added successfully");
                               }
@@ -59,7 +60,7 @@ public class ResponseController {
                          // Monitor seats
                          break;
                     default:
-                         response = prepareResponse(request, new HashMap<String, Object>() {
+                         response = new Response(new HashMap<String, Object>() {
                               {
                                    put("error", "Invalid request");
                               }
@@ -67,23 +68,20 @@ public class ResponseController {
                          break;
                }
           } else {
-               response = prepareResponse(request, new HashMap<String, Object>() {
+               response = new Response(new HashMap<String, Object>() {
                     {
                          put("error", e.getMessage());
                     }
                });
           }
-          return response;
-     }
 
-     public DatagramPacket prepareResponse(Request request, HashMap<String, Object> responseBody) {
           try {
-               byte[] marshalledResponse = new Marshaller().marshal(responseBody);
-               DatagramPacket response = new DatagramPacket(marshalledResponse, marshalledResponse.length,
+               byte[] marshalledResponse = new Marshaller().marshal(response.getResponseBody());
+               DatagramPacket responsePacket = new DatagramPacket(marshalledResponse, marshalledResponse.length,
                          request.getClientAddress(), request.getClientPort());
-               return response;
-          } catch (Exception e) {
-               e.printStackTrace();
+               return responsePacket;
+          } catch (Exception ex) {
+               ex.printStackTrace();
           }
           return null;
      }
