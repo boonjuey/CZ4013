@@ -93,6 +93,7 @@ class GUI:
             try:
                 available_seats = int(
                     input('Please enter the number of seats available on the flight: '))
+                
                 break
             except ValueError:
                 print('Invalid number of seats. Please try again.')
@@ -107,11 +108,13 @@ class GUI:
             try:
                 flight_id = int(
                     input('Please enter the flight identifier of the flight: '))
+                duration = int(
+                    input('Please enter the monitor interval for this flight in seconds: '))
                 break
             except ValueError:
                 print('Invalid flight identifier. Please try again.')
         print(f'Monitoring seat availability for flight {str(flight_id)} ...')
-        return Request(5, {'flight_id': flight_id})
+        return Request(5, {'flight_id': flight_id, 'duration': duration})
 
     def display_choice_7(self) -> None:
         print('Thanks for using the application!')

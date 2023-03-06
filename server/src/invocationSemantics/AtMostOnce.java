@@ -8,9 +8,11 @@ import controller.ResponseController;
 import java.util.HashMap;
 
 import errors.DuplicateFlightIdException;
+import errors.DuplicateSubscriberException;
 import errors.InsufficientSeatsException;
 import errors.InvalidFlightIdException;
 import errors.NoFlightFoundException;
+import errors.NoSubscriptionFoundException;
 import model.Request;
 
 public class AtMostOnce extends InvocationSemantics {
@@ -22,7 +24,7 @@ public class AtMostOnce extends InvocationSemantics {
 
     @Override
     public Object processRequest(Request request) throws DuplicateFlightIdException,
-            InsufficientSeatsException, InvalidFlightIdException, NoFlightFoundException {
+            InsufficientSeatsException, InvalidFlightIdException, NoFlightFoundException, DuplicateSubscriberException, NoSubscriptionFoundException {
         for (Request r : history.keySet()) {
             if (r.getRequestId() == request.getRequestId()
                     && r.getClientAddress().equals(request.getClientAddress())
