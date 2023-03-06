@@ -2,17 +2,22 @@ package controller;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
 import model.Flight;
+import model.Subscriber;
 import dao.FlightDao;
 import errors.DuplicateFlightIdException;
+import errors.DuplicateSubscriberException;
 import errors.InsufficientSeatsException;
 import errors.InvalidFlightIdException;
 import errors.NoFlightFoundException;
+import errors.NoSubscriptionFoundException;
 
 public class FlightController {
     private FlightDao flightDao;
+
 
     public FlightController(FlightDao flightDao) {
         this.flightDao = flightDao;
@@ -73,4 +78,5 @@ public class FlightController {
             System.out.println(flight.toString());
         }
     }
+
 }

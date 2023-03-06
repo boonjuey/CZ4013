@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import model.Flight;
 import java.io.File;
 import java.io.FileNotFoundException;
+import errors.FlightNotFoundException;
 import java.util.Scanner;
 
 public class FlightDao {
     private List<Flight> flights = new ArrayList<>();
-    private File file = new File(System.getProperty("user.dir") + "\\server\\src\\data\\flights.txt");
+    // private File file = new File(System.getProperty("user.dir") +
+    // "\\server\\src\\data\\flights.txt");
+    private File file = new File(System.getProperty("user.home") + "/Desktop/CZ4013/server/src/data/flights.txt");
 
     public void readFile() {
         try {
@@ -33,6 +36,20 @@ public class FlightDao {
 
     public List<Flight> getFlights() {
         return flights;
+    }
+
+    public Flight getFlightById(int id) throws FlightNotFoundException{
+       
+        for(Flight flight: flights){
+            System.out.println(Integer.toString(id));
+            System.out.println(Integer.toString(flight.getFlightId()));
+
+            if(flight.getFlightId()==id){
+                return flight;
+            }
+        }
+   
+       throw new FlightNotFoundException();
     }
 
     public void addFlight(Flight flight) {

@@ -105,4 +105,9 @@ public class Request {
     public void setAvailableSeats(int availableSeats) {
         requestBody.put("available_seats", availableSeats);
     }
+
+    //Added for callback
+    public int getDuration(){
+        return (int) requestBody.get("duration"); 
+    }
 }

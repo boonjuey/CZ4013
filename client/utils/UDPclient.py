@@ -1,9 +1,11 @@
 import socket
+import time
 from utils.config import *
 from view.gui import GUI
 from controller.flight_controller import FlightController
 from controller.request_controller import RequestController
 from controller.response_controller import ResponseController
+from model.request import Request
 class UDP:
     def __init__(self):
         self.client_host = CLIENT_HOST
@@ -30,7 +32,6 @@ class UDP:
             response_received = False
             request = flight_controller.display()
             marshalled_request = request_controller.prepare_request(request)
-            
             for _ in range(self.max_retries + 1):
                 try:
                     if response_received:
@@ -38,12 +39,49 @@ class UDP:
                     
                     s.sendto(marshalled_request, (self.server_host, self.server_port)) # send message
                     
+                    #need to have another recvfrom so its able to listen for updates. 
                     data = s.recvfrom(UDP_BUF_SIZE) # receive response
                     response = response_controller.process_response(data)
-                    response.print_response()
+
+                    #if type is subscription succes then I need to start a new thread that actively listens out for subscription 
+                    #thread is sth like while(time.Now() < startTime + duration): s.recvfrom.....
+                    #once loops ends, end the thread. 
+                    response.print_response()   
+                    #depending on marshalled request,  
+                    # if request type == 5, i will check the start time for this request 
+                    res = response.get_response_body()
+                    print(res)
                     response_received = True
+                    if res["requestType"] == "5":
+                        start = time.time()
+                        s.settimeout(int(res["duration"])+5)
+                        print("request 5")
+                        while((start+ int(res["duration"])) + 3 >= time.time()):
+                            data = s.recvfrom(UDP_BUF_SIZE) # receive response
+                            response = response_controller.process_response(data)   
+                            response.print_response() 
+                            # print("hello")
+                           
+                        # request = Request(6, {'flight_id': res["flightId"], 'duration': int(res["duration"])})
+                        # marshalled_request = request_controller.prepare_request(request)
+                        # s.sendto(marshalled_request, (self.server_host, self.server_port)) # send message
+                        # data = s.recvfrom(UDP_BUF_SIZE) # receive response
+                        # response = response_controller.process_response(data)   
+                        # response.print_response()     
+                           
+                    s.settimeout(TIMEOUT) 
+
                     break
                 except socket.timeout:
+                    if request.get_request_type()==5:
+
+                        print("Flight Id" + str(res["flightId"]))
+                        request = Request(6, {'flight_id': int(res["flightId"]), 'duration': int(res["duration"])})
+                        marshalled_request = request_controller.prepare_request(request)
+                        s.sendto(marshalled_request, (self.server_host, self.server_port)) # send message
+                        data = s.recvfrom(UDP_BUF_SIZE) # receive response
+                        response = response_controller.process_response(data)   
+                        response.print_response() 
                     print("Request timed out. Retrying...")
             if not response_received:
                 print("Request failed. Please try again later.")

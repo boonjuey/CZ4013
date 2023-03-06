@@ -5,20 +5,23 @@ import java.util.Map;
 
 import dao.FlightDao;
 import errors.DuplicateFlightIdException;
+import errors.DuplicateSubscriberException;
 import errors.InsufficientSeatsException;
 import errors.InvalidFlightIdException;
 import errors.NoFlightFoundException;
+import errors.NoSubscriptionFoundException;
 import model.Flight;
 import model.Request;
+import model.Subscriber;
 import utils.Marshaller;
 
 public class RequestController {
     private FlightController flightController;
     private CallbackController callbackController;
 
-    public RequestController(FlightDao flightDao) {
+    public RequestController(FlightDao flightDao, CallbackController callbackController) {
         flightController = new FlightController(flightDao);
-        callbackController = new CallbackController();
+        this.callbackController = callbackController;
     }
 
     public Request getRequest(DatagramPacket packet) {
@@ -30,7 +33,7 @@ public class RequestController {
     }
 
     public Object processRequest(Request request) throws DuplicateFlightIdException,
-            InsufficientSeatsException, InvalidFlightIdException, NoFlightFoundException {
+            InsufficientSeatsException, InvalidFlightIdException, NoFlightFoundException, DuplicateSubscriberException, NoSubscriptionFoundException {
         switch (request.getRequestType()) {
             case 0:
                 return flightController.getFlightIds(request.getSource(), request.getDestination());
@@ -47,6 +50,17 @@ public class RequestController {
             case 5:
                 // Function to run callback
                 // callbackController.runCallback...
+                return callbackController
+                        .addSubscriber(request.getFlightId(), new Subscriber(request.getClientAddress(), 
+                            request.getClientPort(), request.getDuration()));
+            
+            case 6: 
+                return callbackController
+                        .removeSubscriber(request.getFlightId(), new Subscriber(request.getClientAddress(), 
+                            request.getClientPort(), request.getDuration()));
+                
+                
+
             default:
                 return null;
         }
