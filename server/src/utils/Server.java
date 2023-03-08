@@ -28,6 +28,7 @@ public class Server extends Thread {
     private String server_host;
     private int server_port;
     private int timeout;
+    private float drop_rate;
     private DatagramSocket socket;
     private boolean running;
     private byte[] buf = new byte[1024];
@@ -67,6 +68,7 @@ public class Server extends Thread {
             server_host = prop.getProperty("SERVER_HOST");
             server_port = Integer.parseInt(prop.getProperty("SERVER_PORT"));
             timeout = Integer.parseInt(prop.getProperty("TIMEOUT"));
+            drop_rate = Float.parseFloat(prop.getProperty("DROP_RATE"));
 
             socket = new DatagramSocket(server_port);
         } catch (IOException e) {
@@ -99,6 +101,11 @@ public class Server extends Thread {
                 }
 
                 System.out.println("Response: " + new String(response.getData()));
+
+                if (Math.random() <= drop_rate) {
+                    System.out.println("Reply message dropped");
+                    continue;
+                }
                 if (System.currentTimeMillis() <= endTime) {
                     socket.send(response);
                 }

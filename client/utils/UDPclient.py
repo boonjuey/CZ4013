@@ -1,5 +1,6 @@
 import socket
 import time
+import random
 from utils.config import *
 from view.gui import GUI
 from controller.flight_controller import FlightController
@@ -16,6 +17,7 @@ class UDP:
 
         self.timeout = TIMEOUT
         self.max_retries = MAX_RETRIES
+        self.drop_rate = DROP_RATE
 
         self.run()
     
@@ -37,6 +39,9 @@ class UDP:
                     if response_received:
                         break
                     
+                    if random.random() <= self.drop_rate:
+                        print("Request message dropped")
+                        continue
                     s.sendto(marshalled_request, (self.server_host, self.server_port)) # send message
                     
                     #need to have another recvfrom so its able to listen for updates. 
