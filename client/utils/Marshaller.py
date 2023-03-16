@@ -68,14 +68,15 @@ def unmarshal(message: bytearray) -> map:
 
 
 """ This segment is just for testing the Marshaller and Unmarshaller. To be deleted later on """
-testmap = {}
-testmap["Flight Number"] = 123
-testmap["Message"] = "Long flight message details here"
-testmap["Cost"] = 0.54
-testmap["Sample flight list"] = [1,2,3,4]
-testmap["Sample destinations"] = ["Singapore", "Hong Kong"]
+if __name__ == "__main__":
+    testmap = {}
+    testmap["Flight Number"] = 123
+    testmap["Message"] = "Long flight message details here"
+    testmap["Cost"] = 0.54
+    testmap["Sample flight list"] = [1,2,3,4]
+    testmap["Sample destinations"] = ["Singapore", "Hong Kong"]
 
-res = marshal(testmap)
-message = unmarshal(res)
-for key in message:
-    print(key, message[key])
+    res = marshal(testmap)
+    message = unmarshal(res)
+    for key in message:
+        print(key, message[key])
