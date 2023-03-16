@@ -41,12 +41,14 @@ public class RequestController {
                 return flightController.getFlightDetails(request.getFlightId());
             case 2:
                 flightController.makeReservation(request.getFlightId(), request.getSeatsToReserve());
+                return null;
             case 3:
                 return flightController.getDestinations();
             case 4:
                 flightController
                         .addFlight(new Flight(request.getFlightId(), request.getSource(), request.getDestination(),
                                 request.getDepartureTime(), request.getAirfare(), request.getAvailableSeats()));
+                return null;
             case 5:
                 // Function to run callback
                 // callbackController.runCallback...
