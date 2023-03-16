@@ -88,7 +88,7 @@ public class Server extends Thread {
                 
                 long endTime = System.currentTimeMillis() + timeout * 1000;
                 Request request = invocationSemantics.getRequest(packet);
-                System.out.println("Request: " + request.getFlightId());
+            
                 DatagramPacket response = null;
 
                 try {
@@ -102,7 +102,7 @@ public class Server extends Thread {
 
                 System.out.println("Response: " + new String(response.getData()));
 
-                if (Math.random() <= drop_rate) {
+                if (Math.random() <= drop_rate && request.getRequestType() != 5 && request.getRequestType() != 6) {
                     System.out.println("Reply message dropped");
                     continue;
                 }

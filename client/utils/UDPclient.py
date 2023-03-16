@@ -9,8 +9,8 @@ from controller.response_controller import ResponseController
 from model.request import Request
 class UDP:
     def __init__(self):
-        self.client_host = CLIENT_HOST
-        self.client_port = CLIENT_PORT
+        # self.client_host = CLIENT_HOST
+        # self.client_port = CLIENT_PORT
 
         self.server_host = SERVER_HOST
         self.server_port = SERVER_PORT
@@ -59,14 +59,14 @@ class UDP:
                     response_received = True
                     if res["requestType"] == "5":
                         start = time.time()
-                        s.settimeout(int(res["duration"])+5)
+                        s.settimeout(int(res["duration"]))
                         print("request 5")
-                        while((start+ int(res["duration"])) + 3 >= time.time()):
+                        while((start+ int(res["duration"])) >= time.time()):
                             data = s.recvfrom(UDP_BUF_SIZE) # receive response
                             response = response_controller.process_response(data)   
                             response.print_response() 
                             # print("hello")
-                           
+                        raise socket.timeout
                         # request = Request(6, {'flight_id': res["flightId"], 'duration': int(res["duration"])})
                         # marshalled_request = request_controller.prepare_request(request)
                         # s.sendto(marshalled_request, (self.server_host, self.server_port)) # send message
@@ -79,15 +79,15 @@ class UDP:
                     break
                 except socket.timeout:
                     if request.get_request_type()==5:
-
-                        print("Flight Id" + str(res["flightId"]))
                         request = Request(6, {'flight_id': int(res["flightId"]), 'duration': int(res["duration"])})
                         marshalled_request = request_controller.prepare_request(request)
                         s.sendto(marshalled_request, (self.server_host, self.server_port)) # send message
                         data = s.recvfrom(UDP_BUF_SIZE) # receive response
                         response = response_controller.process_response(data)   
-                        response.print_response() 
-                    print("Request timed out. Retrying...")
+                        response.print_response()
+                    else:
+                        print("Request timed out. Retrying...")
+                    s.settimeout(TIMEOUT)
             if not response_received:
                 print("Request failed. Please try again later.")
 
