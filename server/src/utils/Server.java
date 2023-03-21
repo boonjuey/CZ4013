@@ -79,6 +79,7 @@ public class Server extends Thread {
     public void run() {
         System.out.println("Running server...");
         running = true;
+        // boolean first = true;
 
         try {
             while (running) {
@@ -93,7 +94,7 @@ public class Server extends Thread {
 
                 try {
                     Object result = invocationSemantics.processRequest(request);
-                    System.out.println("Result: " + result);
+                    // System.out.println("Result: " + result);
                     response = invocationSemantics.prepareResponse(request, result, null);
                 } catch (Exception e) {
                     System.out.println(e);
@@ -101,7 +102,12 @@ public class Server extends Thread {
                 }
 
                 System.out.println("Response: " + new String(response.getData()));
-
+                
+                // if (!first && request.getRequestId() == 0) {
+                //     drop_rate = 0;
+                // } else {
+                //     first = false;
+                // }
                 if (Math.random() <= drop_rate && request.getRequestType() != 5 && request.getRequestType() != 6) {
                     System.out.println("Reply message dropped");
                     continue;
@@ -115,7 +121,7 @@ public class Server extends Thread {
                     ArrayList<Subscriber> subscribers2 = callbackController
                             .getSubscribersByFlightId(request.getFlightId());
                     if (size > 0) {
-                        System.out.printf("Size: %d", size);
+                        // System.out.printf("Size: %d", size);
                         for (Subscriber subscriber : subscribers2) {
                            
                             int seats = flightDao.getFlightById(request.getFlightId()).getAvailableSeats();
@@ -136,8 +142,8 @@ public class Server extends Thread {
 
                     }
                 }
-                System.out.println("Size after");
-                System.out.println(callbackController.getSubscriberSizeByFlightId(1));
+                // System.out.println("Size after");
+                // System.out.println(callbackController.getSubscriberSizeByFlightId(1));
                
             }
             socket.close();
