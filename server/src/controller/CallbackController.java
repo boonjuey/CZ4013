@@ -1,26 +1,34 @@
 package controller;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+
+import dao.FlightDao;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import model.Subscriber;
 import model.Subscription;
 import errors.DuplicateSubscriberException;
+import errors.FlightNotFoundException;
 import errors.NoSubscriptionFoundException;
 
 public class CallbackController {
 
     //maintain a list of subscribers upon startup of server
     private ConcurrentHashMap<Integer, ArrayList<Subscriber>> subscribersByFlight;
+    private FlightDao flightDao;
 
-    public CallbackController(){
+    public CallbackController(FlightDao flightDao){
         this.subscribersByFlight = new ConcurrentHashMap<Integer, ArrayList<Subscriber>>();
+        this.flightDao = flightDao;
     }
     //For subscription 
-    public Subscription addSubscriber(int flightId, Subscriber newSubscriber) throws DuplicateSubscriberException{
+    public Subscription addSubscriber(int flightId, Subscriber newSubscriber) throws DuplicateSubscriberException, FlightNotFoundException {
         //subscription already exists
         //if flight in hashmap
-        
+        if (flightDao.getFlightById(flightId) == null) {
+            throw new FlightNotFoundException();
+        }
         if (subscribersByFlight.containsKey(flightId)){
             System.out.printf("Flight exists %d \n", flightId);
             for(Subscriber subscriber: subscribersByFlight.get(flightId)){

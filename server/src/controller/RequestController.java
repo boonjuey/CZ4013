@@ -6,6 +6,7 @@ import java.util.Map;
 import dao.FlightDao;
 import errors.DuplicateFlightIdException;
 import errors.DuplicateSubscriberException;
+import errors.FlightNotFoundException;
 import errors.InsufficientSeatsException;
 import errors.InvalidFlightIdException;
 import errors.NoFlightFoundException;
@@ -33,7 +34,7 @@ public class RequestController {
     }
 
     public Object processRequest(Request request) throws DuplicateFlightIdException,
-            InsufficientSeatsException, InvalidFlightIdException, NoFlightFoundException, DuplicateSubscriberException, NoSubscriptionFoundException {
+            InsufficientSeatsException, InvalidFlightIdException, NoFlightFoundException, DuplicateSubscriberException, NoSubscriptionFoundException, FlightNotFoundException {
         switch (request.getRequestType()) {
             case 0:
                 return flightController.getFlightIds(request.getSource(), request.getDestination());
