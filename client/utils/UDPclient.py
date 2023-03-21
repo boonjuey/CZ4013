@@ -39,7 +39,7 @@ class UDP:
             response_received = False
             request = flight_controller.display()
             marshalled_request = request_controller.prepare_request(request)
-            for _ in range(self.max_retries + 1):
+            for i in range(self.max_retries + 1):
                 try:
                     if response_received:
                         break
@@ -90,8 +90,11 @@ class UDP:
                         data = s.recvfrom(UDP_BUF_SIZE) # receive response
                         response = response_controller.process_response(data)   
                         response.print_response()
-                    else:
+                    elif i != self.max_retries:
                         print("Request timed out. Retrying...")
+                    else:
+                        print("Request timed out.")
+
                     s.settimeout(TIMEOUT)
             if not response_received:
                 print("Request failed. Please try again later.")
