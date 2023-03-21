@@ -76,9 +76,12 @@ class GUI:
             try:
                 departure_time = input(
                     'Please enter the departure time of the flight (DD/MM/YYYY HH:MM:SS): ')
-                self.regex(departure_time, '%d/%m/%Y %H:%M:%S')
+                departure_time = int(self.regex(
+                    departure_time, '%d/%m/%Y %H:%M:%S').timestamp())
                 break
             except ValueError:
+                print('Invalid departure time. Please try again.')
+            except OSError:
                 print('Invalid departure time. Please try again.')
 
         while True:
@@ -97,10 +100,8 @@ class GUI:
                 break
             except ValueError:
                 print('Invalid number of seats. Please try again.')
-
+        
         print('Please wait while we add the flight for you...')
-        departure_time = int(self.regex(
-            departure_time, '%d/%m/%Y %H:%M:%S').timestamp())
         return Request(4, {'flight_id': flight_id, 'source': source, 'destination': destination, 'departure_time': departure_time, 'airfare': airfare, 'available_seats': available_seats})
 
     def display_choice_6(self) -> Request:
