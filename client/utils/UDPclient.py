@@ -1,3 +1,4 @@
+import sys
 import socket
 import time
 import random
@@ -7,13 +8,18 @@ from controller.flight_controller import FlightController
 from controller.request_controller import RequestController
 from controller.response_controller import ResponseController
 from model.request import Request
+
 class UDP:
     def __init__(self):
         # self.client_host = CLIENT_HOST
         # self.client_port = CLIENT_PORT
-
-        self.server_host = SERVER_HOST
-        self.server_port = SERVER_PORT
+        n = len(sys.argv)
+        if n == 3:
+            self.server_host = sys.argv[1]
+            self.server_port = int(sys.argv[2])
+        else:
+            print("Please enter the correct number of arguments for the server host and port.")
+            sys.exit(1)
 
         self.timeout = TIMEOUT
         self.max_retries = MAX_RETRIES
