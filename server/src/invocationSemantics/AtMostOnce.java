@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 import errors.DuplicateFlightIdException;
 import errors.DuplicateSubscriberException;
+import errors.FlightNotFoundException;
 import errors.InsufficientSeatsException;
 import errors.InvalidFlightIdException;
 import errors.NoFlightFoundException;
@@ -24,7 +25,7 @@ public class AtMostOnce extends InvocationSemantics {
 
     @Override
     public Object processRequest(Request request) throws DuplicateFlightIdException,
-            InsufficientSeatsException, InvalidFlightIdException, NoFlightFoundException, DuplicateSubscriberException, NoSubscriptionFoundException {
+            InsufficientSeatsException, InvalidFlightIdException, NoFlightFoundException, DuplicateSubscriberException, NoSubscriptionFoundException, FlightNotFoundException {
         for (Request r : history.keySet()) {
             if (r.getRequestId() == request.getRequestId()
                     && r.getClientAddress().equals(request.getClientAddress())

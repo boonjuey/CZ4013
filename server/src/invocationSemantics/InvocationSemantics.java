@@ -6,6 +6,7 @@ import controller.RequestController;
 import controller.ResponseController;
 import errors.DuplicateFlightIdException;
 import errors.DuplicateSubscriberException;
+import errors.FlightNotFoundException;
 import errors.InsufficientSeatsException;
 import errors.InvalidFlightIdException;
 import errors.NoFlightFoundException;
@@ -27,7 +28,7 @@ public abstract class InvocationSemantics {
 
     public Object processRequest(Request request) throws DuplicateFlightIdException,
             InsufficientSeatsException, InvalidFlightIdException, NoFlightFoundException,
-             DuplicateSubscriberException, NoSubscriptionFoundException {
+             DuplicateSubscriberException, NoSubscriptionFoundException, FlightNotFoundException {
         return requestController.processRequest(request);
     }
 

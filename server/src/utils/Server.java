@@ -39,7 +39,7 @@ public class Server extends Thread {
     public Server(String[] args) {
         this.flightDao = new FlightDao();
         flightDao.readFile();
-        this.callbackController = new CallbackController();
+        this.callbackController = new CallbackController(flightDao);
         RequestController requestController = new RequestController(flightDao, callbackController);
         ResponseController responseController = new ResponseController();
 
