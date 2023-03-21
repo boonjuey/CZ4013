@@ -13,8 +13,7 @@ class UDP:
     def __init__(self):
         # self.client_host = CLIENT_HOST
         # self.client_port = CLIENT_PORT
-        n = len(sys.argv)
-        if n == 3:
+        if len(sys.argv) == 3:
             self.server_host = sys.argv[1]
             self.server_port = int(sys.argv[2])
         else:
