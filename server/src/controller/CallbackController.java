@@ -30,7 +30,6 @@ public class CallbackController {
             throw new FlightNotFoundException();
         }
         if (subscribersByFlight.containsKey(flightId)){
-            System.out.printf("Flight exists %d \n", flightId);
             for(Subscriber subscriber: subscribersByFlight.get(flightId)){
                 if((subscriber.getAddress().getHostAddress()).matches(newSubscriber.getAddress().getHostAddress()) && 
                 (subscriber.getPort())== newSubscriber.getPort()){
@@ -45,7 +44,6 @@ public class CallbackController {
         }
         else{
             
-            System.out.printf("Flight %d  doesn't exists \n", flightId);
             System.out.println(newSubscriber);
             ArrayList<Subscriber> subscribers = new ArrayList<Subscriber>(); 
             subscribers.add(newSubscriber);
@@ -56,8 +54,6 @@ public class CallbackController {
     }
 
     public Integer removeSubscriber(int flightId, Subscriber subscriber) throws NoSubscriptionFoundException{
-        System.out.printf("Remove subscriber %d \n", flightId);
-        System.out.println(subscriber);
         if(!subscribersByFlight.containsKey(flightId)){
             throw new NoSubscriptionFoundException();
         }
@@ -66,8 +62,6 @@ public class CallbackController {
         ArrayList<Subscriber> subscribers = (ArrayList<Subscriber>) subscribersByFlight.get(flightId);
         System.out.println(subscribers.size());
         for(int i=0; i < subscribers.size(); i++ ){
-            System.out.printf("%d \n", subscribers.size());
-            System.out.print(subscribers.get(i));
             if(((subscribers.get(i)).getAddress().getHostAddress()).matches(subscriber.getAddress().getHostAddress()) && 
             (subscribers.get(i).getPort()== subscriber.getPort())){
                 found = true; 
@@ -78,23 +72,12 @@ public class CallbackController {
             }
         }
         if(!found){
-            System.out.println("not found");
             throw new NoSubscriptionFoundException();
         }
         System.out.println(removedSubscriber);
         return new Integer(flightId); 
     }
-    // public void removeSubscriber(int flightId,  ) throws NoSubscriptionFoundException{
-    //     System.out.printf("Remove subscriber \n", flightId);
-    //     if(!subscribersByFlight.containsKey(flightId) || !subscribersByFlight.get(flightId).contains(removedSubscriber)){
-    //         throw new NoSubscriptionFoundException();
-    //     }
-    //     ArrayList<Subscriber> subscribers = (ArrayList<Subscriber>) subscribersByFlight.get(flightId);
-    //     subscribers.remove(removedSubscriber);
-    //     subscribersByFlight.put(flightId, subscribers);
-    //     System.out.println(subscribersByFlight);
-    // }
-
+    
     public ArrayList<Subscriber> getSubscribersByFlightId(int id){
         return subscribersByFlight.get(id);
     }
