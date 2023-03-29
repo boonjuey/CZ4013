@@ -12,7 +12,7 @@ public class FlightDao {
     private List<Flight> flights = new ArrayList<>();
     // private File file = new File(System.getProperty("user.dir") +
     // "\\server\\src\\data\\flights.txt");
-    private File file = new File(System.getProperty("user.home") + "/Desktop/CZ4013/server/src/data/flights.txt");
+    private File file = new File("C:\\Users\\jawli\\Desktop\\CZ4013\\CZ4013\\server\\src\\data\\flights.txt");
 
     public void readFile() {
         try {
@@ -41,9 +41,6 @@ public class FlightDao {
     public Flight getFlightById(int id) throws FlightNotFoundException{
        
         for(Flight flight: flights){
-            System.out.println(Integer.toString(id));
-            System.out.println(Integer.toString(flight.getFlightId()));
-
             if(flight.getFlightId()==id){
                 return flight;
             }

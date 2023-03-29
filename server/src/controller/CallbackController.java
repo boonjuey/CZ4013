@@ -33,7 +33,6 @@ public class CallbackController {
             for(Subscriber subscriber: subscribersByFlight.get(flightId)){
                 if((subscriber.getAddress().getHostAddress()).matches(newSubscriber.getAddress().getHostAddress()) && 
                 (subscriber.getPort())== newSubscriber.getPort()){
-                    System.out.println(subscriber.getAddress());
                     throw new DuplicateSubscriberException();
                 }
             }
@@ -44,7 +43,6 @@ public class CallbackController {
         }
         else{
             
-            System.out.println(newSubscriber);
             ArrayList<Subscriber> subscribers = new ArrayList<Subscriber>(); 
             subscribers.add(newSubscriber);
             subscribersByFlight.put(flightId, subscribers);
@@ -60,7 +58,6 @@ public class CallbackController {
         boolean found = false;
         Subscriber removedSubscriber = null;
         ArrayList<Subscriber> subscribers = (ArrayList<Subscriber>) subscribersByFlight.get(flightId);
-        System.out.println(subscribers.size());
         for(int i=0; i < subscribers.size(); i++ ){
             if(((subscribers.get(i)).getAddress().getHostAddress()).matches(subscriber.getAddress().getHostAddress()) && 
             (subscribers.get(i).getPort()== subscriber.getPort())){
@@ -74,7 +71,6 @@ public class CallbackController {
         if(!found){
             throw new NoSubscriptionFoundException();
         }
-        System.out.println(removedSubscriber);
         return new Integer(flightId); 
     }
     

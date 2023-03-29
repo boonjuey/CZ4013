@@ -74,9 +74,5 @@ public class FlightController {
             }
         }
         flightDao.addFlight(newFlight);
-        for (Flight flight : flightDao.getFlights()) {
-            System.out.println(flight.toString());
-        }
     }
-
 }

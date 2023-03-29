@@ -65,7 +65,6 @@ public class ResponseController {
                          break;
                     case 5:
                          Subscription subscription = (Subscription) result;
-                         System.out.println("Case5 : Flight id" + subscription.getFlightId());
                          // Monitor seats
                          response = new Response(new HashMap<String, Object>() {
                               {    
@@ -79,7 +78,6 @@ public class ResponseController {
                     
                     case 6: 
                          Integer flightId = (Integer) result;
-                         System.out.println("Flight id" + flightId);
                          response = new Response(new HashMap<String, Object>() {
                               {    
                                    put("requestType", "6");

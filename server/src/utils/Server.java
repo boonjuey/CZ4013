@@ -54,8 +54,7 @@ public class Server extends Thread {
             // "\\server\\src\\utils\\config.properties";
             // String configFilePath = System.getProperty("user.home") +
             // "/Desktop/CZ4013/server/src/utils/config.properties";
-            String configFilePath = System.getProperty("user.home")
-                    + "/Desktop/CZ4013/server/src/utils/config.properties";
+            String configFilePath = "C:\\Users\\jawli\\Desktop\\CZ4013\\CZ4013\\server\\src\\utils\\config.properties";
 
             // String configFilePath = System.getProperty("user.home") + File.separator +
             // "Desktop" + File.separator + "CZ4013" + File.separator + "server" +
@@ -94,15 +93,11 @@ public class Server extends Thread {
 
                 try {
                     Object result = invocationSemantics.processRequest(request);
-                    // System.out.println("Result: " + result);
                     response = invocationSemantics.prepareResponse(request, result, null);
                 } catch (Exception e) {
-                    System.out.println(e);
                     response = invocationSemantics.prepareResponse(request, null, e);
                 }
 
-                System.out.println("Response: " + new String(response.getData()));
-                
                 // if (!first && request.getRequestId() == 0) {
                 //     drop_rate = 0;
                 // } else {
@@ -115,13 +110,11 @@ public class Server extends Thread {
                 if (System.currentTimeMillis() <= endTime) {
                     socket.send(response);
                 }
-                System.out.println(request.getRequestType());
                 if (request.getRequestType() == 2) {
                     int size = callbackController.getSubscriberSizeByFlightId(request.getFlightId());
                     ArrayList<Subscriber> subscribers2 = callbackController
                             .getSubscribersByFlightId(request.getFlightId());
                     if (size > 0) {
-                        // System.out.printf("Size: %d", size);
                         for (Subscriber subscriber : subscribers2) {
                            
                             int seats = flightDao.getFlightById(request.getFlightId()).getAvailableSeats();
@@ -138,13 +131,9 @@ public class Server extends Thread {
 
                             socket.send(responsePacket);
                         }
-                        System.out.println(callbackController.getSubscriberSizeByFlightId(1));
 
                     }
                 }
-                // System.out.println("Size after");
-                // System.out.println(callbackController.getSubscriberSizeByFlightId(1));
-               
             }
             socket.close();
         } catch (IOException e) {

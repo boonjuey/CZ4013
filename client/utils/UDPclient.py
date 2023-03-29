@@ -56,28 +56,19 @@ class UDP:
                     #if type is subscription succes then I need to start a new thread that actively listens out for subscription 
                     #thread is sth like while(time.Now() < startTime + duration): s.recvfrom.....
                     #once loops ends, end the thread. 
-                    response.print_response()   
+                    response.print_response()
                     #depending on marshalled request,  
                     # if request type == 5, i will check the start time for this request 
                     res = response.get_response_body()
-                    print(res)
                     response_received = True
                     if res["requestType"] == "5":
                         start = time.time()
                         s.settimeout(int(res["duration"]))
-                        print("request 5")
                         while((start+ int(res["duration"])) >= time.time()):
                             data = s.recvfrom(UDP_BUF_SIZE) # receive response
                             response = response_controller.process_response(data)   
                             response.print_response() 
-                            # print("hello")
-                        raise socket.timeout
-                        # request = Request(6, {'flight_id': res["flightId"], 'duration': int(res["duration"])})
-                        # marshalled_request = request_controller.prepare_request(request)
-                        # s.sendto(marshalled_request, (self.server_host, self.server_port)) # send message
-                        # data = s.recvfrom(UDP_BUF_SIZE) # receive response
-                        # response = response_controller.process_response(data)   
-                        # response.print_response()     
+                        raise socket.timeout   
                            
                     s.settimeout(TIMEOUT) 
 
